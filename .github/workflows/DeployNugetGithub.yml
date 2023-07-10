@@ -3,14 +3,18 @@ on:
   workflow_call:
     inputs:
       os:
-        required: true
+        required: false
         type: string
+        default: ubuntu-latest
+        description: 'The os to run the runner on'
       dotnet_version:
         required: true
         type: string
+        description: 'The dotnet version to use'
       solution_file:
         required: true
         type: string
+        description: 'The full name of the solution file'
     secrets:
       NUGET_KEY:
         required: false
