@@ -47,7 +47,7 @@ jobs:
         --verbosity normal
         --no-build
         --nologo
+        --filter FullyQualifiedName!~IntegrationTests
         --collect "Code Coverage"
         --settings .runsettings
-        --results-directory ./bin/TestResults
         --logger GitHubActions
