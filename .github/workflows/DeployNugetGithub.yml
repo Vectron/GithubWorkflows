@@ -71,6 +71,9 @@ jobs:
         --skip-duplicate
         --api-key "$GITHUB_TOKEN"
       shell: bash
+    - name: Validate nuget key
+      if: env.NUGET_KEY == ''
+      run: echo "::warning \"NUGET_KEY\" has not been set, go to \"settings \> secrets \> actions\" to create it"
     - name: Push to NuGet Feed
       if: env.NBGV_PublicRelease == 'true' && env.NUGET_KEY != ''
       run: >
