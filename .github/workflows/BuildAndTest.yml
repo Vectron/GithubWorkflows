@@ -46,7 +46,6 @@ jobs:
         --password ${{ secrets.GITHUB_PAT }}
         --store-password-in-clear-text
         --name github
-      shell: bash
     - name: Install dependencies
       run: dotnet restore ${{ inputs.solution_file }}
     - name: Build

@@ -47,7 +47,6 @@ jobs:
         --password ${{ secrets.GITHUB_TOKEN }}
         --store-password-in-clear-text
         --name github
-      shell: bash
     - name: Nerdbank.GitVersioning
       uses: dotnet/nbgv@master
       with:
@@ -69,7 +68,6 @@ jobs:
         --source "github"
         --skip-duplicate
         --api-key ${{ secrets.GITHUB_TOKEN }}
-      shell: bash
     - name: Validate nuget key
       if: env.NUGET_KEY == ''
       run: echo "::warning::'NUGET_KEY' has not been set, go to 'settings \> secrets \> actions' to create it"
@@ -80,4 +78,3 @@ jobs:
         --source https://api.nuget.org/v3/index.json
         --skip-duplicate
         --api-key ${{ secrets.NUGET_KEY }}
-      shell: bash
