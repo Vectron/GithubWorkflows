@@ -41,6 +41,14 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
+    - name: Setup github remotes
+      run: >
+        dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+        --username ${{ github.repository_owner }}
+        --password "$GITHUB_TOKEN"
+        --store-password-in-clear-text
+        --name github
+      shell: bash
     - name: Nerdbank.GitVersioning
       uses: dotnet/nbgv@master
       with:
@@ -56,14 +64,6 @@ jobs:
         --no-restore
         /p:Version=${{ env.NBGV_SemVer2 }}
         --output ./bin/Pack/
-    - name: Setup github remotes
-      run: >
-        dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-        --username ${{ github.repository_owner }}
-        --password "$GITHUB_TOKEN"
-        --store-password-in-clear-text
-        --name github
-      shell: bash
     - name: Push to GitHub Feed
       run: >
         dotnet nuget push ./bin/Pack/*.nupkg
