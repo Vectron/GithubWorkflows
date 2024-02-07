@@ -30,7 +30,6 @@ jobs:
     permissions:
       packages: write
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       NUGET_KEY: ${{ secrets.NUGET_KEY }}
     steps:
     - name: Checkout
@@ -69,7 +68,7 @@ jobs:
         dotnet nuget push ./bin/Pack/*.nupkg
         --source "github"
         --skip-duplicate
-        --api-key "$GITHUB_TOKEN"
+        --api-key ${{ secrets.GITHUB_TOKEN }}
       shell: bash
     - name: Validate nuget key
       if: env.NUGET_KEY == ''
@@ -80,5 +79,5 @@ jobs:
         dotnet nuget push ./bin/Pack/*.nupkg
         --source https://api.nuget.org/v3/index.json
         --skip-duplicate
-        --api-key "$NUGET_KEY"
+        --api-key ${{ secrets.NUGET_KEY }}
       shell: bash
