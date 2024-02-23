@@ -54,7 +54,6 @@ jobs:
     - name: Install dependencies
       run: dotnet restore ${{ inputs.solution_file }}
     - name: Pack
-      shell: bash
       run: >
         dotnet pack ${{ inputs.solution_file }}
         --configuration Release
@@ -64,7 +63,6 @@ jobs:
         /p:Version=${{ env.NBGV_SemVer2 }}
         --output ./bin/Pack/
     - name: Push to GitHub Feed
-      shell: bash
       run: >
         dotnet nuget push ./bin/Pack/*.nupkg
         --source "github"
