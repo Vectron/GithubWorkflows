@@ -23,6 +23,7 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   # Disable sending usage data to Microsoft
   DOTNET_CLI_TELEMETRY_OPTOUT: true
+  OutputPath: ./bin/Pack/
 jobs:
   deploy:
     if: github.ref == 'refs/heads/main' || contains(github.ref, 'refs/tags/')
@@ -53,6 +54,11 @@ jobs:
         setAllVars: true
     - name: Install dependencies
       run: dotnet restore ${{ inputs.solution_file }}
+    - name: Set Windows
+      if: ${{ inputs.os }} == 'Windows'
+      run: |
+         chcp 65001 #set code page to utf-8
+         echo ("OutputPath=" + ".\bin\Pack\") >> $env:GITHUB_ENV
     - name: Pack
       run: >
         dotnet pack ${{ inputs.solution_file }}
@@ -61,10 +67,10 @@ jobs:
         --nologo
         --no-restore
         /p:Version=${{ env.NBGV_SemVer2 }}
-        --output ./bin/Pack/
+        --output ${{ env.OutputPath }}
     - name: Push to GitHub Feed
       run: >
-        dotnet nuget push ./bin/Pack/*.nupkg
+        dotnet nuget push ${{ env.OutputPath }}*.nupkg
         --source "github"
         --skip-duplicate
         --api-key ${{ secrets.GITHUB_TOKEN }}
