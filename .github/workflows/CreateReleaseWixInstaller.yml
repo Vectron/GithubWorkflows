@@ -91,9 +91,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ${{ env.OutputPath }}
         run: >
-          for dir in */
+          for dir in */; 
           do
-            gh release upload  "$tag" "$dir*msi#${dir%*/}"
-            --repo="$GITHUB_REPOSITORY"
+          gh release upload  "$tag" "$dir*msi#${dir%*/}"
+          --repo="$GITHUB_REPOSITORY";
           done
         shell: bash
