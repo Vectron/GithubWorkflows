@@ -59,6 +59,11 @@ jobs:
           --name github
       - name: Install dependencies
         run: dotnet restore ${{ inputs.solution_file }}
+      - name: Set Windows
+        if: runner.os == 'Windows'
+        run: |
+          chcp 65001 #set code page to utf-8
+          echo ("OutputPath=" + ".\bin\Pack\") >> $env:GITHUB_ENV
       - name: Build
         run: >
           dotnet build ${{ inputs.solution_file }}
