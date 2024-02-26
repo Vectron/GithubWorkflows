@@ -66,7 +66,17 @@ jobs:
           --configuration Release
           --no-restore
           --output ${{ env.OutputPath }}
-      - name: "Create release"
+      - name: Create release
+        env:
+          tag: ${{ github.ref_name }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ${{ env.OutputPath }}
+        run: >
+          gh release create "$tag"
+          --repo="$GITHUB_REPOSITORY"
+          --title="${GITHUB_REPOSITORY#*/} ${tag#v}"
+          --generate-notes
+      - name: Upload installers
         env:
           tag: ${{ github.ref_name }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -74,9 +84,7 @@ jobs:
         run: >
           for dir in */
           do
-            gh release create "$tag" "$dir*msi#${dir%*/}"
+            gh release upload  "$tag" "$dir*msi#${dir%*/}"
             --repo="$GITHUB_REPOSITORY"
-            --title="${GITHUB_REPOSITORY#*/} ${tag#v}"
-            --generate-notes
           done
         shell: bash
