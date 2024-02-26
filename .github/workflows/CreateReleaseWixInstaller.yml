@@ -31,7 +31,11 @@ env:
   OutputPath: ./bin/Installer/
 jobs:
   build-and-test:
+    if: contains(github.ref, 'refs/tags/')
     runs-on: ${{ inputs.os }}
+    permissions:
+      deployments: write
+      contents: write
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
     steps:
