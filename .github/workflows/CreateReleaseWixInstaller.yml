@@ -73,7 +73,6 @@ jobs:
         run: >
           dotnet build ${{ inputs.installer_project }}
           --configuration Release
-          --no-restore
           --output ${{ env.OutputPath }}
       - name: Create release
         env:
