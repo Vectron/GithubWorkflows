@@ -91,9 +91,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ${{ env.OutputPath }}
         run: >
-          for dir in */;
-          do
-          gh release upload  "$tag" "$dir*.msi#${dir%*/}"
-          --repo="$GITHUB_REPOSITORY";
+          for f in $(find . -name '*.msi'); do
+          gh release upload $tag $f
+          --repo="$GITHUB_REPOSITORY"
           done
         shell: bash
