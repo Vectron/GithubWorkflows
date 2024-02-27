@@ -47,12 +47,13 @@ jobs:
         --store-password-in-clear-text
         --name github
     - name: Install dependencies
-      run: dotnet restore ${{ inputs.solution_file }}
+      run: dotnet restore ${{ inputs.solution_file }} /p:EnableWindowsTargeting=true
     - name: Build
       run: >
         dotnet build ${{ inputs.solution_file }}
         --configuration Release
         --no-restore
+        /p:EnableWindowsTargeting=true
     - name: Test
       run: >
         dotnet test ${{ inputs.solution_file }}
@@ -64,3 +65,4 @@ jobs:
         --collect "Code Coverage"
         --settings .runsettings
         --logger GitHubActions
+        /p:EnableWindowsTargeting=true

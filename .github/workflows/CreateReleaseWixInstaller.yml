@@ -58,7 +58,7 @@ jobs:
           --store-password-in-clear-text
           --name github
       - name: Install dependencies
-        run: dotnet restore ${{ inputs.solution_file }}
+        run: dotnet restore ${{ inputs.solution_file }} /p:EnableWindowsTargeting=true
       - name: Set Windows
         if: runner.os == 'Windows'
         run: |
@@ -69,11 +69,13 @@ jobs:
           dotnet build ${{ inputs.solution_file }}
           --configuration Release
           --no-restore
+          /p:EnableWindowsTargeting=true
       - name: Build installer
         run: >
           dotnet build ${{ inputs.installer_project }}
           --configuration Release
           --output ${{ env.OutputPath }}
+          /p:EnableWindowsTargeting=true
       - name: Create release
         env:
           tag: ${{ github.ref_name }}
