@@ -61,7 +61,6 @@ jobs:
         --verbosity normal
         --no-build
         --nologo
-        --filter FullyQualifiedName!~IntegrationTests
         --collect "Code Coverage"
         --settings .runsettings
         --logger GitHubActions
