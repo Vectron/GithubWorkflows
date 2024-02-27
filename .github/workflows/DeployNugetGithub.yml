@@ -15,6 +15,11 @@ on:
         required: true
         type: string
         description: 'The full name of the solution file'
+      run_condition:
+        required: false
+        type: boolean
+        description: 'The condition for running this task'
+        default: ${{github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')}}
     secrets:
       NUGET_KEY:
         required: false
@@ -26,7 +31,7 @@ env:
   OutputPath: ./bin/Pack/
 jobs:
   deploy:
-    if: github.ref == 'refs/heads/main' || contains(github.ref, 'refs/tags/')
+    if: ${{ inputs.run_condition }}
     runs-on: ${{ inputs.os }}
     permissions:
       packages: write
