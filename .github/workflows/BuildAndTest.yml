@@ -15,6 +15,10 @@ on:
         required: true
         type: string
         description: 'The full name of the solution file'
+      solution_directory:
+        required: false
+        type: string
+        description: 'The project or solution directory'
     secrets:
       GITHUB_PAT:
         required: false

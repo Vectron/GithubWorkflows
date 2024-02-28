@@ -14,7 +14,11 @@ on:
       solution_file:
         required: true
         type: string
-        description: 'The full name of the solution file'
+        description: 'The full name of the solution or project file'
+      solution_directory:
+        required: false
+        type: string
+        description: 'The project or solution directory'
       run_condition:
         required: false
         type: boolean
