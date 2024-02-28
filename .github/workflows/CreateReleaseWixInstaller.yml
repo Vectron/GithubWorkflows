@@ -28,7 +28,7 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   # Disable sending usage data to Microsoft
   DOTNET_CLI_TELEMETRY_OPTOUT: true
-  OutputPath: ./bin/Installer/
+  InstallerPath: ./bin/Installer/
 jobs:
   release:
     if: contains(github.ref, 'refs/tags/')
@@ -39,6 +39,12 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
     steps:
+      - name: Sanitize windows paths
+        if: runner.os == 'Windows'
+        run: |
+          chcp 65001 #set code page to utf-8
+          $out = $env:InstallerPath.Replace('/', '\')
+          echo ("InstallerPath=" + $out) >> $env:GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -61,11 +67,6 @@ jobs:
         run: > 
           dotnet restore ${{ inputs.solution_file }}
           /p:EnableWindowsTargeting=true
-      - name: Set Windows
-        if: runner.os == 'Windows'
-        run: |
-          chcp 65001 #set code page to utf-8
-          echo ("OutputPath=" + ".\bin\Pack\") >> $env:GITHUB_ENV
       - name: Build
         run: >
           dotnet build ${{ inputs.solution_file }}
@@ -76,24 +77,22 @@ jobs:
         run: >
           dotnet build ${{ inputs.installer_project }}
           --configuration Release
-          --output ${{ env.OutputPath }}
+          --output ${{ env.InstallerPath }}
           /p:EnableWindowsTargeting=true
       - name: Create release
         env:
           tag: ${{ github.ref_name }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: ${{ env.OutputPath }}
         run: >
           gh release create "$tag"
           --repo="$GITHUB_REPOSITORY"
           --title="${GITHUB_REPOSITORY#*/} ${tag#v}"
           --generate-notes
-        shell: bash
       - name: Upload installers
         env:
           tag: ${{ github.ref_name }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: ${{ env.OutputPath }}
+        working-directory: ${{ env.InstallerPath }}
         run: >
           for f in $(find . -name '*.msi');
           do
