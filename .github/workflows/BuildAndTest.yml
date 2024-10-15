@@ -74,7 +74,4 @@ jobs:
         --verbosity normal
         --no-build
         --nologo
-        --collect "Code Coverage"
-        --settings .runsettings
-        --logger GitHubActions
         /p:EnableWindowsTargeting=true
